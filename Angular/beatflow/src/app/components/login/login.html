@@ -1,0 +1,43 @@
+<p>login works!</p>
+<div class="auth-container">
+  <div class="auth-box">
+    <h2 class="logo">beatflow</h2>
+    <p class="tagline">Your music, your flow.</p>
+
+    <h3>Login to your account</h3>
+
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <div class="input-field">
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="loginData.email"
+          placeholder="Email Address"
+          required
+          #email="ngModel">
+      </div>
+
+      <div class="input-field">
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="loginData.password"
+          placeholder="Password"
+          required>
+      </div>
+
+      <div class="error-msg" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="auth-btn" [disabled]="!loginForm.valid">
+        Log In
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Don't have an account? </span>
+      <a href="/register">Register</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<p>playlists works!</p>
+<div class="sidebar-box">
+      <h4>My Playlists</h4>
+      <div class="create-input">
+        <input [(ngModel)]="newName" placeholder="New playlist name..." (keyup.enter)="create()">
+        <button (click)="create()">+</button>
+      </div>
+      <ul class="nav-list">
+        <li *ngFor="let p of playlists">🎵 {{p.name}}</li>
+      </ul>
+    </div>

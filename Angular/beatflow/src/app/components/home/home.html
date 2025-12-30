@@ -1,0 +1,86 @@
+<div class="saavn-container">
+  <aside class="sidebar">
+    <h2 class="logo" (click)="setView('home')">B</h2>
+    <nav class="icon-nav">
+      <ul>
+        <li (click)="setView('home')" [class.active]="activeView === 'home'"><span>🏠</span></li>
+        <li (click)="setView('search')" [class.active]="activeView === 'search'"><span>🔍</span></li>
+        <li (click)="setView('playlists')" [class.active]="activeView === 'playlists'"><span>📚</span></li>
+        <li (click)="setView('favorites')" [class.active]="activeView === 'favorites'"><span>❤️</span></li>
+      </ul>
+    </nav>
+    <div class="user-section">
+      <div class="user-icon-btn" (click)="setView('profile')" [class.active]="activeView === 'profile'">
+        <img src="https://ui-avatars.com/api/?name={{userName}}&background=00f5ff&color=000" alt="User">
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <header class="top-bar">
+      <div class="search-container">
+        <input type="text" placeholder="Search for tracks, artists...">
+      </div>
+      <button class="add-song-toggle" (click)="toggleSongForm()">
+        {{ showAddSongForm ? '✕ Close' : '＋ Add New Song' }}
+      </button>
+    </header>
+
+    <section class="add-song-section" *ngIf="showAddSongForm">
+      <div class="glass-form">
+        <h3>Upload Track</h3>
+        <div class="form-grid">
+          <input type="text" [(ngModel)]="newSong.title" placeholder="Title">
+          <input type="text" [(ngModel)]="newSong.artist" placeholder="Artist">
+          <input type="text" [(ngModel)]="newSong.album" placeholder="Album">
+          <input type="text" [(ngModel)]="newSong.genre" placeholder="Genre">
+          <input type="text" [(ngModel)]="newSong.fileUrl" placeholder="Audio URL">
+          <input type="text" [(ngModel)]="newSong.coverUrl" placeholder="Cover URL">
+        </div>
+        <button class="submit-song" (click)="onAddSong()">Save</button>
+      </div>
+    </section>
+
+    <div class="view-container" *ngIf="!showAddSongForm">
+
+      <section class="song-section" *ngIf="activeView === 'home'">
+        <h3>New Releases</h3>
+        <app-song-list [songs]="songs" (play)="play($event)" (add)="addToPlaylist($event)" (like)="toggleLike($event)"></app-song-list>
+      </section>
+
+      <div *ngIf="activeView === 'profile'" class="profile-card-view">
+        <div class="glass-card">
+          <button class="close-profile" (click)="setView('home')">✕</button>
+          <div class="profile-header">
+            <div class="large-avatar">{{userName.charAt(0)}}</div>
+            <h2>{{userName}}</h2>
+            <p>Member ID: #{{currentUserId}}</p>
+          </div>
+          <div class="profile-stats">
+            <div class="stat"><span>{{playlists.length}}</span> Playlists</div>
+            <div class="stat"><span>{{songs.length}}</span> Tracks</div>
+          </div>
+          <button class="logout-action-btn" (click)="logout()">
+            <span class="icon">🚪</span> Logout from Beatflow
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="player-bar" *ngIf="player.currentSong$ | async as current">
+    <div class="now-playing">
+      <img [src]="current.coverUrl">
+      <div class="info">
+        <strong>{{ current.title }}</strong>
+        <span>{{ current.artist }}</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="main-play" (click)="player.togglePlay()">
+        {{ (player.isPlaying$ | async) ? '⏸' : '▶' }}
+      </button>
+    </div>
+  </footer>
+</div>

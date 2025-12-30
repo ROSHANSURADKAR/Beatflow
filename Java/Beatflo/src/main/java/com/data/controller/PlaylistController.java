@@ -2,6 +2,7 @@ package com.data.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import com.data.service.PlaylistService;
 
 @RestController
 @RequestMapping("/api/playlists")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PlaylistController {
     private final PlaylistService service;
     public PlaylistController(PlaylistService service){ this.service = service; }
@@ -30,5 +31,10 @@ public class PlaylistController {
     	}
 
     @GetMapping("/user/{userId}")
-    public List<Playlist> byUser(@PathVariable Long userId){ return service.byUser(userId); }
+    public ResponseEntity<?> byUser(@PathVariable Long userId) {
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("User ID cannot be null");
+        }
+        return ResponseEntity.ok(service.byUser(userId));
+    }
 }

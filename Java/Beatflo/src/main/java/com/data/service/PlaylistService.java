@@ -1,5 +1,6 @@
 package com.data.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,7 +13,12 @@ public class PlaylistService {
     private final PlaylistRepository repo;
     public PlaylistService(PlaylistRepository repo){ this.repo = repo; }
 
-    public Playlist create(Playlist p){ p.setId(null); return repo.save(p); }
+    public Playlist create(Playlist p) {
+        if (p.getSongIds() == null) {
+            p.setSongIds(new ArrayList<>());
+        }
+        return repo.save(p);
+    }
     public Playlist addSong(Long playlistId, Long songId){
         Playlist p = repo.findById(playlistId).orElseThrow();
         p.getSongIds().add(songId);
